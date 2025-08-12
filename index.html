@@ -1,0 +1,198 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Shahin's Fun Site</title>
+  <style>
+    :root{--bg:#0f1724;--card:#0b1220;--accent:#06b6d4;--muted:#9aa6b2;--glass: rgba(255,255,255,0.04)}
+    *{box-sizing:border-box;font-family:Inter, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial}
+    body{margin:0;background:linear-gradient(180deg,#071023 0%, #081827 60%);color:#e6f0f2;}
+    header{display:flex;gap:12px;align-items:center;padding:14px 20px;background:linear-gradient(90deg, rgba(255,255,255,0.02), transparent);backdrop-filter: blur(4px)}
+    header h1{font-size:18px;margin:0}
+    nav{margin-left:auto;display:flex;gap:8px}
+    a.btn{color:var(--accent);text-decoration:none;padding:8px 12px;border-radius:10px;border:1px solid rgba(255,255,255,0.03)}
+    main{padding:20px;max-width:1000px;margin:24px auto}
+    .card{background:var(--card);padding:12px;border-radius:12px;box-shadow:0 6px 20px rgba(2,6,23,0.6);border:1px solid rgba(255,255,255,0.02)}
+    .row{display:flex;gap:12px}
+    /* Home */
+    .hero{display:flex;align-items:center;gap:20px}
+    .hero svg{width:160px;height:160px}
+    /* Canvas drawing */
+    #drawArea{border-radius:10px;border:4px solid var(--glass);background:linear-gradient(180deg,#071b2a,#071826);}
+    .controls{display:flex;gap:8px;align-items:center;margin-top:8px}
+    input[type=color]{width:44px;height:36px;border-radius:8px;border:0;padding:0}
+    button{background:transparent;color:var(--accent);border:1px solid rgba(255,255,255,0.06);padding:8px 10px;border-radius:8px;cursor:pointer}
+    footer{color:var(--muted);text-align:center;padding:18px}
+    /* responsive */
+    @media (max-width:700px){.hero{flex-direction:column;align-items:flex-start}.row{flex-direction:column}}
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Shahin's Fun Site</h1>
+    <nav>
+      <a class="btn" href="#home">Home</a>
+      <a class="btn" href="#draw">Draw</a>
+      <a class="btn" href="#gallery">Gallery</a>
+      <a class="btn" href="#qr">QR</a>
+      <a class="btn" href="#about">About</a>
+    </nav>
+  </header>
+
+  <main>
+    <section id="home" class="card">
+      <div class="hero">
+        <!-- cute svg mascot (simple) -->
+        <svg viewBox="0 0 64 64" aria-hidden>
+          <defs>
+            <linearGradient id="g" x1="0" x2="1"><stop offset="0" stop-color="#06b6d4"/><stop offset="1" stop-color="#7c3aed"/></linearGradient>
+          </defs>
+          <circle cx="32" cy="32" r="30" fill="url(#g)" opacity="0.18"/>
+          <g transform="translate(8,6)">
+            <ellipse cx="24" cy="30" rx="20" ry="18" fill="#0ea5a4" opacity="0.8"/>
+            <circle cx="16" cy="24" r="3" fill="#071022"/>
+            <circle cx="32" cy="24" r="3" fill="#071022"/>
+            <path d="M10 34 Q24 44 38 34" stroke="#071022" stroke-width="2" fill="none" stroke-linecap="round"/>
+          </g>
+        </svg>
+        <div>
+          <h2 style="margin:0 0 8px 0">Welcome!</h2>
+          <p style="margin:0;color:var(--muted)">This is a tiny website you can edit. It has a drawing tool, a gallery, and an easy QR code maker. Click the links above to jump around.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="draw" class="card" style="margin-top:16px">
+      <h3>Draw — simple canvas</h3>
+      <div class="row">
+        <div style="flex:1">
+          <canvas id="drawArea" width="800" height="480"></canvas>
+          <div class="controls">
+            <label>Color <input id="color" type="color" value="#06b6d4"></label>
+            <label>Brush <input id="size" type="range" min="1" max="60" value="6"></label>
+            <button id="clear">Clear</button>
+            <button id="save">Save to Gallery</button>
+            <button id="download">Download PNG</button>
+          </div>
+          <p style="margin:6px 0 0 0;color:var(--muted)">Tip: Use mouse or touch. Saved pictures appear in the Gallery below.</p>
+        </div>
+        <div style="width:240px">
+          <div class="card" style="padding:10px">
+            <h4 style="margin-top:0">Tools</h4>
+            <p style="color:var(--muted)">Change color and brush size, then draw on the big rectangle. When you save, your picture will appear in <strong>Gallery</strong>.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="gallery" class="card" style="margin-top:16px">
+      <h3>Gallery</h3>
+      <div id="thumbs" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px;margin-top:8px"></div>
+      <p id="gallery-msg" style="color:var(--muted)">No saved drawings yet — draw something and click "Save to Gallery"!</p>
+    </section>
+
+    <section id="qr" class="card" style="margin-top:16px">
+      <h3>QR Code Maker</h3>
+      <p style="color:var(--muted);margin-top:0">Type a link or text, press Generate, then you can download the QR or open it on your phone.</p>
+      <div style="display:flex;gap:8px;align-items:center">
+        <input id="qrText" placeholder="https://example.com" style="flex:1;padding:10px;border-radius:10px;border:1px solid rgba(255,255,255,0.04);background:transparent;color:inherit">
+        <button id="genQ">Generate</button>
+        <a id="qrDL" download="qr.png" style="display:none">Download</a>
+      </div>
+      <div style="margin-top:12px">
+        <img id="qrImg" alt="qr code" style="width:160px;height:160px;border-radius:8px;border:1px solid rgba(255,255,255,0.03)">
+      </div>
+    </section>
+
+    <section id="about" class="card" style="margin-top:16px">
+      <h3>About this site</h3>
+      <p style="color:var(--muted)">Made for learning and fun. You can copy this file and edit the HTML to change text, colors, or add new pages. Ask me to add anything and I'll help!</p>
+    </section>
+
+  </main>
+
+  <footer>Made with ❤️ — edit this file to make it yours.</footer>
+
+  <script>
+    // Simple single-file website logic
+    // DRAWING
+    const canvas = document.getElementById('drawArea');
+    const ctx = canvas.getContext('2d');
+    let drawing=false; let lastX=0,lastY=0;
+    const colorEl = document.getElementById('color');
+    const sizeEl = document.getElementById('size');
+    function resizeCanvas(){
+      // keep actual canvas size but scale for small screens
+      const maxW = Math.min(window.innerWidth-40, 800);
+      canvas.style.width = maxW + 'px';
+      canvas.style.height = (maxW * 480/800)+'px';
+    }
+    window.addEventListener('resize', resizeCanvas); resizeCanvas();
+
+    function drawLine(x,y){
+      ctx.lineJoin='round';ctx.lineCap='round';
+      ctx.strokeStyle = colorEl.value; ctx.lineWidth = sizeEl.value;
+      ctx.beginPath(); ctx.moveTo(lastX,lastY); ctx.lineTo(x,y); ctx.stroke();
+      lastX=x; lastY=y;
+    }
+    canvas.addEventListener('pointerdown', e=>{drawing=true; const r=canvas.getBoundingClientRect(); lastX=(e.clientX-r.left)*(canvas.width/r.width); lastY=(e.clientY-r.top)*(canvas.height/r.height);});
+    canvas.addEventListener('pointermove', e=>{ if(!drawing) return; const r=canvas.getBoundingClientRect(); const x=(e.clientX-r.left)*(canvas.width/r.width); const y=(e.clientY-r.top)*(canvas.height/r.height); drawLine(x,y); });
+    canvas.addEventListener('pointerup', e=>{drawing=false});
+    canvas.addEventListener('pointerleave', e=>{drawing=false});
+    document.getElementById('clear').addEventListener('click', ()=>{ctx.clearRect(0,0,canvas.width,canvas.height);});
+
+    // gallery in localStorage
+    function saveToGallery(){
+      const data = canvas.toDataURL('image/png');
+      let arr = JSON.parse(localStorage.getItem('myGallery')||'[]');
+      arr.unshift(data); if(arr.length>24) arr.pop();
+      localStorage.setItem('myGallery', JSON.stringify(arr));
+      renderGallery();
+    }
+    document.getElementById('save').addEventListener('click', saveToGallery);
+    document.getElementById('download').addEventListener('click', ()=>{
+      const a=document.createElement('a');a.href=canvas.toDataURL('image/png');a.download='my-draw.png';a.click();
+    });
+
+    function renderGallery(){
+      const thumbs = document.getElementById('thumbs'); thumbs.innerHTML='';
+      const arr = JSON.parse(localStorage.getItem('myGallery')||'[]');
+      if(arr.length===0){document.getElementById('gallery-msg').style.display='block';return;} else document.getElementById('gallery-msg').style.display='none';
+      arr.forEach((src,i)=>{
+        const img = document.createElement('img'); img.src=src; img.style.width='100%'; img.style.borderRadius='8px'; img.style.cursor='pointer';
+        img.title='Click to open full size';
+        img.addEventListener('click', ()=>{ window.open(src); });
+        thumbs.appendChild(img);
+      });
+    }
+    renderGallery();
+
+    // QR code generator (using Google Chart API - works without libraries)
+    const qrImg = document.getElementById('qrImg');
+    const qrText = document.getElementById('qrText');
+    const qrDL = document.getElementById('qrDL');
+    document.getElementById('genQ').addEventListener('click', ()=>{
+      const t = encodeURIComponent(qrText.value || 'https://example.com');
+      const src = `https://chart.googleapis.com/chart?chs=300x300&cht=qr&chl=${t}&choe=UTF-8`;
+      qrImg.src = src;
+      qrDL.href = src; qrDL.style.display='inline-block'; qrDL.textContent='Download QR';
+    });
+
+    // tiny router to scroll to sections if hash changes
+    function goToHash(){ const h = location.hash || '#home'; const el = document.querySelector(h); if(el){el.scrollIntoView({behavior:'smooth'});} }
+    window.addEventListener('hashchange', goToHash); setTimeout(goToHash,200);
+
+    // initialize canvas with a light grid to make it fun
+    function initCanvas(){
+      ctx.fillStyle='#04131a'; ctx.fillRect(0,0,canvas.width,canvas.height);
+      ctx.strokeStyle='rgba(255,255,255,0.03)'; ctx.lineWidth=1;
+      for(let x=0;x<canvas.width;x+=40){ ctx.beginPath(); ctx.moveTo(x,0); ctx.lineTo(x,canvas.height); ctx.stroke(); }
+      for(let y=0;y<canvas.height;y+=40){ ctx.beginPath(); ctx.moveTo(0,y); ctx.lineTo(canvas.width,y); ctx.stroke(); }
+    }
+    initCanvas();
+
+  </script>
+</body>
+</html>
+
